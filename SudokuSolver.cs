@@ -1,4 +1,6 @@
-﻿using System;
+﻿//#define FORWARD_CHECKING
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -7,7 +9,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-//#define OPTIMIZE_VAR
 
 namespace SudokuSolver_CSP
 {
@@ -91,6 +92,7 @@ namespace SudokuSolver_CSP
 
         private bool BackTrack(int index)
         {
+            //Solve using Backtracking Search Algorithm
             Variable ptrVar = GetNextVariable(index++);
             if (ptrVar == null) return true;
 
@@ -119,7 +121,6 @@ namespace SudokuSolver_CSP
 
         private void InitVariables()
         {
-            //ToDo: Init variable exclude values exists in Constraint. How much will gain?
             Variables.Clear();
             for (int x = 0; x < Size; x++)
             {
@@ -129,7 +130,7 @@ namespace SudokuSolver_CSP
                     {
                         Variable v = new Variable(x, y);
                         Variables.Add(v);
-#if OPTIMIZE_VAR
+#if FORWARD_CHECKING
                         //Another 5ms if without this.
                         Constraint c = Constraints.First(r => r.X == v.X && r.Y == v.Y);
                         for(int n=0; n < v.Values.Count; n++)

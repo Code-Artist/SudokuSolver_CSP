@@ -29,8 +29,8 @@ namespace SudokuSolver_CSP
         private void Solver_CellValueChanged(object sender, SudokuCellEventArgs e)
         {
             DataTable.Rows[e.Cell.Y].Cells[e.Cell.X].Value = e.Cell.Value;
-            //Application.DoEvents();
-            //Thread.Sleep(10);
+            Application.DoEvents();
+            //Thread.Sleep(1);
         }
 
         private void InitTable()
