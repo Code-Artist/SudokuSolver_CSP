@@ -14,4 +14,4 @@ A define flag FORWARD_CHECKING in code is used to enable / disable forward check
 To visualize search algorithm execution, subscribe to CellValueChanged event in MainForm constructor to show value change on each iteration. Disable this line to get maximum performance of the algorithm.
 
 ### Reference
-[Constraint Satisfaction Problems (CSP) in Artificial Intelligence]([https://github.com/Code-Artist/SudokuSolver_CSP/new/main?readme=1](https://github.com/darkeclipz/sudoku-csp)https://github.com/darkeclipz/sudoku-csp)
+[Constraint Satisfaction Problems (CSP) in Artificial Intelligence](https://github.com/darkeclipz/sudoku-csp)

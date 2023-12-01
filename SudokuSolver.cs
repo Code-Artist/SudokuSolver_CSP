@@ -1,4 +1,4 @@
-﻿//#define FORWARD_CHECKING
+﻿#define FORWARD_CHECKING
 
 using System;
 using System.Collections.Generic;
@@ -80,6 +80,7 @@ namespace SudokuSolver_CSP
             InitConstraints();
         }
 
+        private double Step = 0;
         public bool Solve()
         {
             InitVariables();
@@ -87,6 +88,7 @@ namespace SudokuSolver_CSP
             DateTime tNow = DateTime.Now;
             bool status = BackTrack(0);
             Trace.WriteLine("Solved in " + (DateTime.Now - tNow).TotalMilliseconds + " ms");
+            Trace.WriteLine("Total Steps = " + Step);
             return status;
         }
 
@@ -101,11 +103,12 @@ namespace SudokuSolver_CSP
             SudokuCell ptrCell = Cells.First(c => c.X == ptrVar.X && c.Y == ptrVar.Y);
             foreach (int v in ptrVar.Values)
             {
+                Step++;
                 if (EvaluateConstraint(ptrVar, ptrConstraint, v))
                 {
                     ptrCell.Value = v;
                     CellValueChanged?.Invoke(this, new SudokuCellEventArgs() { Cell = ptrCell });
-                    if (BackTrack(index)) 
+                    if (BackTrack(index))
                         return true;
                     ptrCell.Value = 0;
                 }
@@ -131,9 +134,9 @@ namespace SudokuSolver_CSP
                         Variable v = new Variable(x, y);
                         Variables.Add(v);
 #if FORWARD_CHECKING
-                        //Another 5ms if without this.
+                        //Another 450ms if without this.
                         Constraint c = Constraints.First(r => r.X == v.X && r.Y == v.Y);
-                        for(int n=0; n < v.Values.Count; n++)
+                        for (int n = 0; n < v.Values.Count; n++)
                         {
                             if (!EvaluateConstraint(v, c, v.Values[n]))
                                 v.Values.RemoveAt(n--);
@@ -143,6 +146,14 @@ namespace SudokuSolver_CSP
                 }
             }
             Variables = Variables.OrderBy(s => s.Values.Count).ToList();
+            double iteration = 1;
+            foreach (Variable v in Variables)
+            {
+                if(v.Values.Count == 0) 
+                    continue;
+                iteration *= v.Values.Count;
+            }
+            Trace.WriteLine("Total iterations = " + iteration);
         }
 
         /// <summary>
